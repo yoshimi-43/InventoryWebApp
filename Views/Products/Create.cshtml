@@ -1,0 +1,12 @@
+@model InventoryWebApp.Models.Product
+<h2>新規商品登録</h2>
+<form asp-action="Create" method="post">
+    <label>商品名:</label>
+    <input asp-for="Name" /><br />
+    <label>数量:</label>
+    <input asp-for="Quantity" /><br />
+    <label>単価:</label>
+    <input asp-for="Price" /><br />
+    <button type="submit">登録</button>
+</form>
+<a asp-action="Index">戻る</a>
