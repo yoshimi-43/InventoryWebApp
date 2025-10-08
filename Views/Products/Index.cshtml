@@ -1,0 +1,33 @@
+@model IEnumerable<InventoryWebApp.Models.Product>
+@{
+    ViewData["Title"] = "在庫一覧";
+}
+<h2>在庫一覧</h2>
+
+<form method="get" asp-action="Index">
+    <input type="text" name="search" value="@ViewBag.Search" placeholder="商品名検索" />
+    <button type="submit">検索</button>
+    <a asp-action="Create">新規追加</a>
+    <a asp-action="ExportCsv">CSV出力</a>
+</form>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>ID</th><th>商品名</th><th>数量</th><th>単価</th><th>合計金額</th><th>操作</th>
+    </tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Id</td>
+        <td>@item.Name</td>
+        <td>@item.Quantity</td>
+        <td>@item.Price.ToString("N0")円</td>
+        <td>@item.TotalValue.ToString("N0")円</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">編集</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">詳細</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">削除</a>
+        </td>
+    </tr>
+}
+</table>

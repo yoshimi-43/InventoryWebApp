@@ -3,6 +3,6 @@
 <p>ID: @Model.Id</p>
 <p>商品名: @Model.Name</p>
 <p>数量: @Model.Quantity</p>
-<p>単価: @Model.Price</p>
-<p>在庫金額: @Model.TotalValue</p>
+<p>単価: @Model.Price.ToString("N0")円</p>
+<p>合計金額: @Model.TotalValue.ToString("N0")円</p>
 <a asp-action="Index">戻る</a>
