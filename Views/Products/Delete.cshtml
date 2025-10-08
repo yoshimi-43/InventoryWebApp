@@ -1,7 +1,7 @@
 @model InventoryWebApp.Models.Product
 <h2>削除確認</h2>
 <p>本当に「@Model.Name」を削除しますか？</p>
-<form asp-action="DeleteConfirmed" method="post">
+<form asp-action="Delete" method="post">
     <input type="hidden" asp-for="Id" />
     <button type="submit">削除</button>
     <a asp-action="Index">キャンセル</a>
