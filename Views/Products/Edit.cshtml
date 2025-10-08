@@ -7,8 +7,8 @@
     <label>数量:</label>
     <input asp-for="Quantity" /><br />
     <label>単価:</label>
-    <input asp-for="Price" /><br />
-    <p>在庫金額: @(Model.Quantity * Model.Price)</p>
+    <input asp-for="Price" />円<br />
+    <p>合計金額: @((Model.Quantity * Model.Price).ToString("N0"))円</p>
     <button type="submit">更新</button>
 </form>
 <a asp-action="Index">戻る</a>
