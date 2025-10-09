@@ -73,7 +73,7 @@ namespace InventoryWebApp.Controllers
         {
             var products = _repo.GetAll();
             var csv = new StringBuilder();
-            csv.AppendLine("ID,商品名,数量,単価,在庫金額");
+            csv.AppendLine("ID,商品名,数量,単価,合計金額");
 
             foreach (var p in products)
                 csv.AppendLine($"{p.Id},{p.Name},{p.Quantity},{p.Price},{p.TotalValue}");
