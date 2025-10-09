@@ -12,7 +12,8 @@ namespace InventoryWebApp.Controllers
         public IActionResult Index(string? search)
         {
             var products = _repo.GetAll(search);
-            ViewBag.Search = search;
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return PartialView("_ProductTablePartial", products);　// Ajax検索時
             return View(products);
         }
 
