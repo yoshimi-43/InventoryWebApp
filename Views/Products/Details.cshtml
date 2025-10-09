@@ -1,8 +1,10 @@
 @model InventoryWebApp.Models.Product
 <h2>商品詳細</h2>
-<p>ID: @Model.Id</p>
-<p>商品名: @Model.Name</p>
-<p>数量: @Model.Quantity</p>
-<p>単価: @Model.Price.ToString("N0")円</p>
-<p>合計金額: @Model.TotalValue.ToString("N0")円</p>
-<a asp-action="Index">戻る</a>
+
+<div class="mb-2"><strong>ID:</strong> @Model.Id</div>
+<div class="mb-2"><strong>商品名:</strong> @Model.Name</div>
+<div class="mb-2"><strong>数量:</strong> @Model.Quantity</div>
+<div class="mb-2"><strong>単価:</strong> @String.Format("{0:N0}", Model.Price)円</div>
+<div class="mb-2"><strong>合計金額:</strong> @String.Format("{0:N0}", Model.TotalValue)円</div>
+
+<a asp-action="Index" class="btn btn-secondary">戻る</a>
