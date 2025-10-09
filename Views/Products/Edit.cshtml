@@ -1,14 +1,47 @@
 @model InventoryWebApp.Models.Product
+
+@{
+    ViewData["Title"] = "商品編集";
+}
+
 <h2>商品編集</h2>
+
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />
-    <label>商品名:</label>
-    <input asp-for="Name" /><br />
-    <label>数量:</label>
-    <input asp-for="Quantity" /><br />
-    <label>単価:</label>
-    <input asp-for="Price" />円<br />
-    <p>合計金額: @((Model.Quantity * Model.Price).ToString("N0"))円</p>
-    <button type="submit">更新</button>
+
+    <div class="form-group mb-2">
+        <label asp-for="Name">商品名</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="Quantity">数量</label>
+        <input asp-for="Quantity" class="form-control" id="quantityInput" />
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="Price">単価</label>
+        <input asp-for="Price" class="form-control" id="priceInput" />円
+    </div>
+
+    <div class="form-group mb-2">
+        <label>合計金額</label>
+        <input type="text" class="form-control" id="totalValue" readonly value="@Model.TotalValue" />円
+    </div>
+
+    <button type="submit" class="btn btn-primary">更新</button>
+    <a asp-action="Index" class="btn btn-secondary">戻る</a>
 </form>
-<a asp-action="Index">戻る</a>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateTotal() {
+            const qty = parseFloat($("#quantityInput").val()) || 0;
+            const price = parseFloat($("#priceInput").val()) || 0;
+            $("#totalValue").val((qty * price).toFixed(2));
+        }
+
+        $("#quantityInput, #priceInput").on("input", updateTotal);
+    </script>
+}
