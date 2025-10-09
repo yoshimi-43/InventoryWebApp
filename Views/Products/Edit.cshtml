@@ -37,9 +37,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function updateTotal() {
-            const qty = parseFloat($("#quantityInput").val()) || 0;
-            const price = parseFloat($("#priceInput").val()) || 0;
-            $("#totalValue").val((qty * price).toFixed(2));
+            const qty = parseInt($("#quantityInput").val()) || 0;
+            const price = parseInt($("#priceInput").val()) || 0;
+            $("#totalValue").val((qty * price));
         }
 
         $("#quantityInput, #priceInput").on("input", updateTotal);
