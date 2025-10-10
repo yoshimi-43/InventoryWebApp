@@ -11,22 +11,22 @@
 
     <div class="form-group mb-2">
         <label asp-for="Name">商品名</label>
-        <input asp-for="Name" class="form-control" />
+        <input asp-for="Name" class="form-control" style="width:300px" />
     </div>
 
     <div class="form-group mb-2">
         <label asp-for="Quantity">数量</label>
-        <input asp-for="Quantity" class="form-control" id="quantityInput" />
+        <input asp-for="Quantity" class="form-control" style="width:100px" id="quantityInput" />
     </div>
 
     <div class="form-group mb-2">
         <label asp-for="Price">単価</label>
-        <input asp-for="Price" class="form-control" id="priceInput" />円
+        <input asp-for="Price" class="form-control" style="width:150px" id="priceInput" />円
     </div>
 
     <div class="form-group mb-2">
         <label>合計金額</label>
-        <input type="text" class="form-control" id="totalValue" readonly value="@Model.TotalValue" />円
+        <input type="text" class="form-control" style="width:150px" id="totalValue" readonly value="@Model.TotalValue" />円
     </div>
 
     <button type="submit" class="btn btn-primary">更新</button>
