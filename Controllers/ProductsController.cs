@@ -9,50 +9,75 @@ namespace InventoryWebApp.Controllers
     {
         private readonly ProductRepository _repo = new();
 
-        public IActionResult Index(string? search)
+        // page, pageSize optional
+        public IActionResult Index(string? search, int page = 1, int pageSize = 10)
         {
-            var products = _repo.GetAll(search);
+            var paged = _repo.GetPaged(search, page < 1 ? 1 : page, pageSize);
+            // Ajaxリクエストなら部分ビュー（テーブルのみ）を返す
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                return PartialView("_ProductTablePartial", products);　// Ajax検索時
-            return View(products);
+            {
+                return PartialView("_ProductTablePartial", paged);
+            }
+
+            // フルビュー（レイアウト含む）を返す
+            ViewBag.Search = search;
+            return View(paged);
+        }
+
+        [HttpGet]
+        public IActionResult Search(string query)
+        {
+            var products = _repo.GetAll();
+            if (!string.IsNullOrEmpty(query))
+            {
+                products = products.Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            return PartialView("_ProductTablePartial", products); // ← 部分ビューを返すことが重要！
         }
 
         public IActionResult Create() => View();
 
         [HttpPost]
-        public IActionResult Create(Product product)
+        public IActionResult Create(Product p)
         {
             if (ModelState.IsValid)
             {
-                _repo.Add(product);
+                _repo.Add(p);
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(p);
         }
 
         public IActionResult Edit(int id)
         {
-            var product = _repo.GetById(id);
-            if (product == null) return NotFound();
-            return View(product);
+            var p = _repo.GetById(id);
+            if (p == null) return NotFound();
+            return View(p);
         }
 
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public IActionResult Edit(Product p)
         {
             if (ModelState.IsValid)
             {
-                _repo.Update(product);
+                _repo.Update(p);
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(p);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var p = _repo.GetById(id);
+            if (p == null) return NotFound();
+            return View(p);
         }
 
         public IActionResult Delete(int id)
         {
-            var product = _repo.GetById(id);
-            if (product == null) return NotFound();
-            return View(product);
+            var p = _repo.GetById(id);
+            if (p == null) return NotFound();
+            return View(p);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -62,23 +87,24 @@ namespace InventoryWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int id)
-        {
-            var product = _repo.GetById(id);
-            if (product == null) return NotFound();
-            return View(product);
-        }
-
         public FileResult ExportCsv()
         {
-            var products = _repo.GetAll();
-            var csv = new StringBuilder();
-            csv.AppendLine("ID,商品名,数量,単価,合計金額");
+            var list = _repo.GetAll();
+            var sb = new StringBuilder();
+            sb.AppendLine("Id,Name,Quantity,Price,TotalValue");
+            foreach (var p in list)
+                sb.AppendLine($"{p.Id},{EscapeCsv(p.Name)},{p.Quantity},{p.Price},{p.TotalValue}");
+            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            return File(bytes, "text/csv", "products.csv");
+        }
 
-            foreach (var p in products)
-                csv.AppendLine($"{p.Id},{p.Name},{p.Quantity},{p.Price},{p.TotalValue}");
-
-            return File(Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", "products.csv");
+        private string EscapeCsv(string s)
+        {
+            if (s.Contains(",") || s.Contains("\"") || s.Contains("\n"))
+            {
+                return $"\"{s.Replace("\"", "\"\"")}\"";
+            }
+            return s;
         }
     }
 }

@@ -1,25 +1,32 @@
-@model IEnumerable<InventoryWebApp.Models.Product>
+@model InventoryWebApp.Models.PagedResult<InventoryWebApp.Models.Product>
 
 <table class="table table-bordered table-striped">
-    <thead>
+    <thead class="table-light">
         <tr>
-            <th>ID</th>
+            <th style="width:60px">ID</th>
             <th>商品名</th>
-            <th>数量</th>
-            <th>単価</th>
-            <th>合計金額</th>
-            <th>操作</th>
+            <th style="width:100px">数量</th>
+            <th style="width:120px">単価</th>
+            <th style="width:140px">合計金額</th>
+            <th style="width:200px">操作</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var p in Model)
+
+    @if (!Model.Items.Any())
+    {
+        <tr><td colspan="6" class="text-center">該当データがありません</td></tr>
+    }
+    else
+    {
+        foreach (var p in Model.Items)
         {
             <tr>
                 <td>@p.Id</td>
                 <td>@p.Name</td>
                 <td>@p.Quantity</td>
-                <td>@p.Price.ToString("N0")円</td>
-                <td>@p.TotalValue.ToString("N0")円</td>
+                <td>@String.Format("{0:N0}", p.Price)</td>
+                <td>@String.Format("{0:N0}", p.TotalValue)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-warning">編集</a>
                     <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-sm btn-info">詳細</a>
@@ -27,5 +34,33 @@
                 </td>
             </tr>
         }
+    }
     </tbody>
 </table>
+
+<!-- ページネーション（単純） -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        @{
+            var page = Model.Page;
+            var totalPages = Model.TotalPages;
+            var start = System.Math.Max(1, page - 2);
+            var end = System.Math.Min(totalPages, page + 2);
+        }
+
+        <li class="page-item @(page == 1 ? "disabled" : "")">
+            <a class="page-link paging-link" href="#" data-page="@(page - 1)">前へ</a>
+        </li>
+
+        @for (int i = start; i <= end; i++)
+        {
+            <li class="page-item @(i == page ? "active" : "")">
+                <a class="page-link paging-link" href="#" data-page="@i">@i</a>
+            </li>
+        }
+
+        <li class="page-item @(page >= totalPages ? "disabled" : "")">
+            <a class="page-link paging-link" href="#" data-page="@(page + 1)">次へ</a>
+        </li>
+    </ul>
+</nav>
