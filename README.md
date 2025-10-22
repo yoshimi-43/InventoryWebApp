@@ -37,7 +37,7 @@
 - フロントエンド: HTML, CSS (Bootstrap), JavaScript (jQuery)
 - バックエンド: C# (.NET 8.0)
 - データベース: SQLite
-- 開発環境: Visual Studio 2022
+- 開発環境: Visual Studio Code
 
 ### 2.2 データベース設計
 
