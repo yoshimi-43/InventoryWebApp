@@ -24,9 +24,9 @@
             <tr>
                 <td>@p.Id</td>
                 <td>@p.Name</td>
-                <td>@p.Quantity</td>
-                <td>@String.Format("{0:N0}", p.Price)</td>
-                <td>@String.Format("{0:N0}", p.TotalValue)</td>
+                <td style="text-align: right;">@p.Quantity</td>
+                <td style="text-align: right;">@String.Format("{0:N0}", p.Price)</td>
+                <td style="text-align: right;">@String.Format("{0:N0}", p.TotalValue)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-warning">編集</a>
                     <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-sm btn-info">詳細</a>
